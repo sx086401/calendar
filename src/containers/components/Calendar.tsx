@@ -1,7 +1,21 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
+import { Grid, makeStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
 import { getDay, startOfMonth, lastDayOfMonth, getDate } from 'date-fns'
 import { addDays } from 'date-fns/esm'
 import React from 'react'
+
+const useStyle = makeStyles({
+  title: {
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: 20,
+    marginTop: 10
+  },
+  calendar: {
+    margin: 10,
+    padding: 10,
+    border: 'solid 1px black'
+  }
+})
 
 function getDates(startDate: Date, endDate: Date) {
   let dates = []
@@ -22,6 +36,7 @@ function chunkWeeks(dates: number[]) {
 }
 
 export default function Calendar() {
+  const classes = useStyle()
   const tableHead = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const now = new Date()
   const startDateOfMonth = startOfMonth(now)
@@ -34,23 +49,31 @@ export default function Calendar() {
   const weeks = chunkWeeks(dates)
 
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          {tableHead.map(head =>
-              <TableCell key={head}>{head}</TableCell>
+    <Grid container spacing={3}>
+      <Grid item md={1}></Grid>
+      <Grid item xs={12} md={10}>
+        <div className={classes.title}>My Calendar</div>
+        <div className={classes.title}>{now.toLocaleDateString('en-US', {year: 'numeric', month: 'long'})}</div>
+        <Table className={classes.calendar}>
+          <TableHead>
+            <TableRow>
+              {tableHead.map(head =>
+                  <TableCell key={head}>{head}</TableCell>
+                )}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {weeks.map((week, idx) =>
+              <TableRow key={idx}>
+                {week.map(day =>
+                  <TableCell key={day}>{day}</TableCell>
+                )}
+              </TableRow>
             )}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {weeks.map((week, idx) =>
-          <TableRow key={idx}>
-            {week.map(day =>
-              <TableCell key={day}>{day}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          </TableBody>
+        </Table>
+      </Grid>
+      <Grid item md={1}></Grid>
+    </Grid>
   )
 }
