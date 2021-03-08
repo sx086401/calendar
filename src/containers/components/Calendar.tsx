@@ -2,6 +2,7 @@ import { Grid, makeStyles, Table, TableBody, TableCell, TableHead, TableRow } fr
 import { getDay, startOfMonth, lastDayOfMonth, getDate } from 'date-fns'
 import { addDays } from 'date-fns/esm'
 import React from 'react'
+import CalendarCell from './CalendarCell'
 
 const useStyle = makeStyles({
   title: {
@@ -14,6 +15,15 @@ const useStyle = makeStyles({
     margin: 10,
     padding: 10,
     border: 'solid 1px black'
+  },
+  headerCell: {
+    textAlign: 'center',
+    borderBottom: 'solid 1px black'
+  },
+  tableCell: {
+    padding: 0,
+    borderTop: 'solid 1px rgb(224, 224, 224)',
+    borderBottom: 'none'
   }
 })
 
@@ -57,16 +67,14 @@ export default function Calendar() {
         <Table className={classes.calendar}>
           <TableHead>
             <TableRow>
-              {tableHead.map(head =>
-                  <TableCell key={head}>{head}</TableCell>
-                )}
+              {tableHead.map(head => <TableCell className={classes.headerCell} key={head}>{head}</TableCell>)}
             </TableRow>
           </TableHead>
           <TableBody>
             {weeks.map((week, idx) =>
               <TableRow key={idx}>
                 {week.map(day =>
-                  <TableCell key={day}>{day}</TableCell>
+                  <TableCell className={classes.tableCell} key={day}><CalendarCell day={day}/></TableCell>
                 )}
               </TableRow>
             )}
