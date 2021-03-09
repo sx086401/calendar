@@ -8,17 +8,22 @@ const useStyle = makeStyles({
   title: {
     display: 'flex',
     justifyContent: 'center',
-    fontSize: 20,
-    marginTop: 10
+    fontSize: 'xx-large',
+    marginTop: 10,
   },
   calendar: {
     margin: 10,
     padding: 10,
-    border: 'solid 1px black'
+    borderCollapse: 'collapse',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  header: {
+    backgroundColor: 'rgb(59, 47, 52, 0.5)',
+    cursor: 'default',
   },
   headerCell: {
     textAlign: 'center',
-    borderBottom: 'solid 1px black'
   },
   tableCell: {
     padding: 0,
@@ -62,10 +67,9 @@ export default function Calendar() {
     <Grid container spacing={3}>
       <Grid item md={1}></Grid>
       <Grid item xs={12} md={10}>
-        <div className={classes.title}>My Calendar</div>
         <div className={classes.title}>{now.toLocaleDateString('en-US', {year: 'numeric', month: 'long'})}</div>
         <Table className={classes.calendar}>
-          <TableHead>
+          <TableHead className={classes.header}>
             <TableRow>
               {tableHead.map(head => <TableCell className={classes.headerCell} key={head}>{head}</TableCell>)}
             </TableRow>

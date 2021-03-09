@@ -6,14 +6,14 @@ const useStyle = makeStyles({
     display: 'flex',
     flexWrap: 'wrap',
     cursor: 'pointer',
-    height: '80px',
+    height: '100px',
     width: '100%',
     '&:hover': {
       backgroundColor: 'rgb(244, 244, 244)'
     },
     '& .title': {
       textAlign: 'center',
-      padding: 5,
+      marginTop: 5,
       width: '100%',
     }
   }
