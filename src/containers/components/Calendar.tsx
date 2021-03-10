@@ -8,10 +8,13 @@ const useStyle = makeStyles({
   title: {
     display: 'flex',
     justifyContent: 'center',
-    fontSize: 'xx-large',
+    fontSize: 'xxx-large',
+    color: 'white',
     marginTop: 10,
   },
   calendar: {
+    backgroundColor: 'rgb(139, 144, 152, 0.5)',
+    border: 'solid 1px',
     margin: 10,
     padding: 10,
     borderCollapse: 'collapse',
@@ -20,12 +23,15 @@ const useStyle = makeStyles({
   },
   header: {
     backgroundColor: 'rgb(59, 47, 52, 0.5)',
+    color: 'white',
     cursor: 'default',
   },
   headerCell: {
+    color: 'white',
     textAlign: 'center',
   },
   tableCell: {
+    color: 'white',
     padding: 0,
     borderTop: 'solid 1px rgb(224, 224, 224)',
     borderBottom: 'none'
