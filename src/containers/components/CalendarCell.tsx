@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core'
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
 const useStyle = makeStyles({
   cell: {
@@ -13,7 +13,7 @@ const useStyle = makeStyles({
     },
     '& .title': {
       textAlign: 'center',
-      margin: 5,
+      marginTop: 10,
       width: '100%',
       height: 10
     },
@@ -58,25 +58,36 @@ interface Props {
 export default function CalendarCell(props: Props) {
   const { day } = props
   const classes = useStyle()
-  const [showDialog, toggleDialog] = useState(false)
+  const [showDialog, toggleDialog] = useState<boolean>(false)
+  const [note, updateNote] = useState<string>('')
+  const [incomingNote, updateIncomingNote] = useState<string>('')
 
   const onClose = () => {
     toggleDialog(false)
   }
 
+  const onChangeNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    updateIncomingNote(e.target.value)
+  }
+
+  const onConfirm = () => {
+    updateNote(incomingNote)
+    onClose()
+  }
+
   return <>
     <div className={classes.cell} onClick={() => toggleDialog(true)}>
       <div className={'title'}>{day}</div>
-      <Typography variant="body1" align='center' className={'note'}>something to do on day {day}</Typography>
+      <Typography variant="body1" align='center' className={'note'}>{note}</Typography>
     </div>
     <Dialog className={classes.dialog} open={showDialog}>
       <DialogTitle className='content'>{day}'s schedule</DialogTitle>
       <DialogContent className='content' dividers>
-        <textarea className={classes.textArea}></textarea>
+        <textarea className={classes.textArea} onChange={onChangeNote} placeholder='Write some notes here.'>{note}</textarea>
       </DialogContent>
       <DialogActions className='content'>
         <Button className={classes.button} onClick={onClose}>cancel</Button>
-        <Button className={classes.button} onClick={onClose}>confirm</Button>
+        <Button className={classes.button} onClick={onConfirm}>confirm</Button>
       </DialogActions>
     </Dialog>
   </>
