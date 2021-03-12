@@ -1,7 +1,9 @@
-import { Grid, makeStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
-import { getDay, startOfMonth, lastDayOfMonth, getDate } from 'date-fns'
+import React, { useState } from 'react'
+import { Grid, makeStyles, styled, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
+import { getDay, startOfMonth, lastDayOfMonth, getDate, addMonths } from 'date-fns'
 import { addDays } from 'date-fns/esm'
-import React from 'react'
+import keyboardArrowLeft from '../../assets/keyboard_arrow_left.svg'
+import keyboardArrowRight from '../../assets/keyboard_arrow_right.svg'
 import CalendarCell from './CalendarCell'
 
 const useStyle = makeStyles({
@@ -10,7 +12,6 @@ const useStyle = makeStyles({
     justifyContent: 'center',
     fontSize: 'xxx-large',
     color: 'white',
-    marginTop: 10,
   },
   calendar: {
     backgroundColor: 'rgb(139, 144, 152, 0.5)',
@@ -38,6 +39,18 @@ const useStyle = makeStyles({
   }
 })
 
+const Banner = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginTop: 5,
+  padding: 5,
+  '& .img': {
+    '&:hover': {
+      cursor: 'pointer',
+    }
+  }
+})
+
 function getDates(startDate: Date, endDate: Date) {
   let dates = []
   let currentDate = startDate
@@ -60,20 +73,33 @@ export default function Calendar() {
   const classes = useStyle()
   const tableHead = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const now = new Date()
-  const startDateOfMonth = startOfMonth(now)
+  const [current, setCurrent] = useState<Date>(now)
+  const startDateOfMonth = startOfMonth(current)
   const startDayOfMonth = getDay(startDateOfMonth)
   const startDateOfCalendar = addDays(startDateOfMonth, -startDayOfMonth)
-  const finalDateOfMonth = lastDayOfMonth(now)
+  const finalDateOfMonth = lastDayOfMonth(current)
   const finalDayOfMonth = getDay(finalDateOfMonth)
   const finalDayOfCalendar = addDays(finalDateOfMonth, 6-finalDayOfMonth)
   const dates = getDates(startDateOfCalendar, finalDayOfCalendar)
   const weeks = chunkWeeks(dates)
 
+  const previousMonth = () => {
+    setCurrent(addMonths(current, -1))
+  }
+
+  const nextMonth = () => {
+    setCurrent(addMonths(current, 1))
+  }
+
   return (
     <Grid container spacing={3}>
       <Grid item md={1}></Grid>
       <Grid item xs={12} md={10}>
-        <div className={classes.title}>{now.toLocaleDateString('en-US', {year: 'numeric', month: 'long'})}</div>
+        <Banner>
+          <img className={'img'} src={keyboardArrowLeft} onClick={previousMonth} alt={keyboardArrowRight}></img>
+          <div className={classes.title}>{current.toLocaleDateString('en-US', {year: 'numeric', month: 'long'})}</div>
+          <img className={'img'} src={keyboardArrowRight} onClick={nextMonth} alt={keyboardArrowRight}></img>
+        </Banner>
         <Table className={classes.calendar}>
           <TableHead className={classes.header}>
             <TableRow>
@@ -83,8 +109,8 @@ export default function Calendar() {
           <TableBody>
             {weeks.map((week, idx) =>
               <TableRow key={idx}>
-                {week.map(day =>
-                  <TableCell className={classes.tableCell} key={day}><CalendarCell day={day}/></TableCell>
+                {week.map(date =>
+                  <TableCell className={classes.tableCell} key={date}><CalendarCell date={date}/></TableCell>
                 )}
               </TableRow>
             )}

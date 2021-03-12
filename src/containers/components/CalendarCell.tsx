@@ -52,11 +52,11 @@ const useStyle = makeStyles({
 })
 
 interface Props {
-  day: number
+  date: number
 }
 
 export default function CalendarCell(props: Props) {
-  const { day } = props
+  const { date } = props
   const classes = useStyle()
   const [showDialog, toggleDialog] = useState<boolean>(false)
   const [note, updateNote] = useState<string>('')
@@ -77,13 +77,13 @@ export default function CalendarCell(props: Props) {
 
   return <>
     <div className={classes.cell} onClick={() => toggleDialog(true)}>
-      <div className={'title'}>{day}</div>
+      <div className={'title'}>{date}</div>
       <Typography variant="body1" align='center' className={'note'}>{note}</Typography>
     </div>
     <Dialog className={classes.dialog} open={showDialog}>
-      <DialogTitle className='content'>{day}'s schedule</DialogTitle>
+      <DialogTitle className='content'>{date}'s schedule</DialogTitle>
       <DialogContent className='content' dividers>
-        <textarea className={classes.textArea} onChange={onChangeNote} placeholder='Write some notes here.'>{note}</textarea>
+        <textarea className={classes.textArea} onChange={onChangeNote} defaultValue={note} placeholder='Write some notes here.'></textarea>
       </DialogContent>
       <DialogActions className='content'>
         <Button className={classes.button} onClick={onClose}>cancel</Button>
