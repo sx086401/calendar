@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core'
-import { getDate } from 'date-fns'
+import { getDate, isToday } from 'date-fns'
 import React, { ChangeEvent, useState } from 'react'
 
 const useStyle = makeStyles({
@@ -9,6 +9,8 @@ const useStyle = makeStyles({
     cursor: 'pointer',
     height: '100px',
     width: '100%',
+    border: ({ isToday }: StyleProps) => isToday ? '1px solid' : 'none',
+    borderRadius: '5%',
     '&:hover': {
       backgroundColor: 'rgb(139, 144, 152, 0.5)'
     },
@@ -56,10 +58,14 @@ interface Props {
   date: Date
 }
 
+interface StyleProps {
+  isToday: boolean
+}
+
 export default function CalendarCell(props: Props) {
   const { date } = props
   const day = getDate(date)
-  const classes = useStyle()
+  const classes = useStyle({ isToday: isToday(date) })
   const [showDialog, toggleDialog] = useState<boolean>(false)
   const [note, updateNote] = useState<string>('')
   const [incomingNote, updateIncomingNote] = useState<string>('')
