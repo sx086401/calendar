@@ -5,6 +5,7 @@ import { addDays } from 'date-fns/esm'
 import keyboardArrowLeft from '../../assets/keyboard_arrow_left.svg'
 import keyboardArrowRight from '../../assets/keyboard_arrow_right.svg'
 import CalendarCell from './CalendarCell'
+import TodaySchedule from './TodaySchedule'
 
 const useStyle = makeStyles({
   title: {
@@ -69,11 +70,22 @@ function chunkWeeks(dates: Date[]): Array<Date[]> {
   return result
 }
 
+interface contextValue {
+  todaySchedule: string,
+  updateTodaySchedule: any
+}
+
+const defaultContext: contextValue = { todaySchedule: '', updateTodaySchedule: null}
+
+export const CalendarContext = React.createContext(defaultContext)
+
 export default function Calendar() {
   const classes = useStyle()
   const tableHead = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const now = new Date()
   const [current, setCurrent] = useState<Date>(now)
+  const [todaySchedule, updateTodaySchedule] = useState('hahaha')
+
   const startDateOfMonth = startOfMonth(current)
   const startDayOfMonth = getDay(startDateOfMonth)
   const startDateOfCalendar = addDays(startDateOfMonth, -startDayOfMonth)
@@ -93,32 +105,36 @@ export default function Calendar() {
   }
 
   return (
-    <Grid container spacing={3}>
-      <Grid item md={1}></Grid>
-      <Grid item xs={12} md={10}>
-        <Banner>
-          <img className={'img'} src={keyboardArrowLeft} onClick={previousMonth} alt={keyboardArrowRight}></img>
-          <div className={classes.title}>{current.toLocaleDateString('en-US', {year: 'numeric', month: 'long'})}</div>
-          <img className={'img'} src={keyboardArrowRight} onClick={nextMonth} alt={keyboardArrowRight}></img>
-        </Banner>
-        <Table className={classes.calendar}>
-          <TableHead className={classes.header}>
-            <TableRow>
-              {tableHead.map(head => <TableCell className={classes.headerCell} key={head}>{head}</TableCell>)}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {weeks.map((week, row) =>
-              <TableRow key={row}>
-                {week.map((date, index) =>
-                  <TableCell className={classes.tableCell} key={index}><CalendarCell date={date}/></TableCell>
-                )}
+    <CalendarContext.Provider value={{ todaySchedule, updateTodaySchedule }}>
+      <Grid container spacing={0}>
+        <Grid item md={2}>
+          <TodaySchedule></TodaySchedule>
+        </Grid>
+        <Grid item xs={12} md={9}>
+          <Banner>
+            <img className={'img'} src={keyboardArrowLeft} onClick={previousMonth} alt={keyboardArrowRight}></img>
+            <div className={classes.title}>{current.toLocaleDateString('en-US', {year: 'numeric', month: 'long'})}</div>
+            <img className={'img'} src={keyboardArrowRight} onClick={nextMonth} alt={keyboardArrowRight}></img>
+          </Banner>
+          <Table className={classes.calendar}>
+            <TableHead className={classes.header}>
+              <TableRow>
+                {tableHead.map(head => <TableCell className={classes.headerCell} key={head}>{head}</TableCell>)}
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {weeks.map((week, row) =>
+                <TableRow key={row}>
+                  {week.map((date, index) =>
+                    <TableCell className={classes.tableCell} key={index}><CalendarCell date={date}/></TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </Grid>
+        <Grid item md={1}></Grid>
       </Grid>
-      <Grid item md={1}></Grid>
-    </Grid>
+    </CalendarContext.Provider>
   )
 }
