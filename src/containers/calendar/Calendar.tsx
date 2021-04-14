@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Grid, makeStyles, styled, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
-import { getDay, startOfMonth, lastDayOfMonth, getDate, addMonths } from 'date-fns'
+import { getDay, startOfMonth, lastDayOfMonth, addMonths } from 'date-fns'
 import { addDays } from 'date-fns/esm'
 import keyboardArrowLeft from '../../assets/keyboard_arrow_left.svg'
 import keyboardArrowRight from '../../assets/keyboard_arrow_right.svg'
@@ -51,17 +51,17 @@ const Banner = styled('div')({
   }
 })
 
-function getDates(startDate: Date, endDate: Date) {
+function getDates(startDate: Date, endDate: Date): Date[] {
   let dates = []
   let currentDate = startDate
   while (currentDate <= endDate) {
-    dates.push(getDate(currentDate))
+    dates.push(currentDate)
     currentDate = addDays(currentDate, 1)
   }
   return dates
 }
 
-function chunkWeeks(dates: number[]) {
+function chunkWeeks(dates: Date[]): Array<Date[]> {
   let result = []
   for (let i = 0; i < dates.length; i += 7) {
     result.push(dates.slice(i, i + 7))
@@ -80,6 +80,7 @@ export default function Calendar() {
   const finalDateOfMonth = lastDayOfMonth(current)
   const finalDayOfMonth = getDay(finalDateOfMonth)
   const finalDayOfCalendar = addDays(finalDateOfMonth, 6-finalDayOfMonth)
+
   const dates = getDates(startDateOfCalendar, finalDayOfCalendar)
   const weeks = chunkWeeks(dates)
 
@@ -107,10 +108,10 @@ export default function Calendar() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {weeks.map((week, idx) =>
-              <TableRow key={idx}>
-                {week.map(date =>
-                  <TableCell className={classes.tableCell} key={date}><CalendarCell date={date}/></TableCell>
+            {weeks.map((week, row) =>
+              <TableRow key={row}>
+                {week.map((date, index) =>
+                  <TableCell className={classes.tableCell} key={index}><CalendarCell date={date}/></TableCell>
                 )}
               </TableRow>
             )}

@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core'
+import { getDate } from 'date-fns'
 import React, { ChangeEvent, useState } from 'react'
 
 const useStyle = makeStyles({
@@ -52,11 +53,12 @@ const useStyle = makeStyles({
 })
 
 interface Props {
-  date: number
+  date: Date
 }
 
 export default function CalendarCell(props: Props) {
   const { date } = props
+  const day = getDate(date)
   const classes = useStyle()
   const [showDialog, toggleDialog] = useState<boolean>(false)
   const [note, updateNote] = useState<string>('')
@@ -77,11 +79,11 @@ export default function CalendarCell(props: Props) {
 
   return <>
     <div className={classes.cell} onClick={() => toggleDialog(true)}>
-      <div className={'title'}>{date}</div>
+      <div className={'title'}>{day}</div>
       <Typography variant="body1" align='center' className={'note'}>{note}</Typography>
     </div>
     <Dialog className={classes.dialog} open={showDialog}>
-      <DialogTitle className='content'>{date}'s schedule</DialogTitle>
+      <DialogTitle className='content'>{day}'s schedule</DialogTitle>
       <DialogContent className='content' dividers>
         <textarea className={classes.textArea} onChange={onChangeNote} defaultValue={note} placeholder='Write some notes here.'></textarea>
       </DialogContent>
