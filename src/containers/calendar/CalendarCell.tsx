@@ -77,6 +77,9 @@ export default function CalendarCell(props: Props) {
     if (isTodayCell) {
       updateNote(calendarContext.todaySchedule)
     }
+    return () => {
+      updateNote('')
+    }
   }, [isTodayCell, calendarContext, updateNote])
 
   const onClose = () => {
