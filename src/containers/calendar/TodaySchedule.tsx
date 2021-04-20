@@ -4,8 +4,6 @@ import { CalendarContext } from './Calendar'
 
 const useStyle = makeStyles({
   root: {
-    display: 'flex',
-    justifyContent: 'center',
     flexWrap: 'wrap',
     color: 'white',
     marginTop: 20,
@@ -16,6 +14,8 @@ const useStyle = makeStyles({
       fontSize: 'xx-large',
     },
     '& .content': {
+      display: 'flex',
+      justifyContent: 'center',
       marginTop: 10,
       fontSize: 'x-large',
       overflowWrap: 'anywhere',
