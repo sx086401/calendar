@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core'
 import { getDate, isToday } from 'date-fns'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { CalendarContext } from './Calendar'
 
 const useStyle = makeStyles({
   cell: {
@@ -64,11 +65,19 @@ interface StyleProps {
 
 export default function CalendarCell(props: Props) {
   const { date } = props
+  const calendarContext = useContext(CalendarContext)
   const day = getDate(date)
-  const classes = useStyle({ isToday: isToday(date) })
+  const isTodayCell = isToday(date)
+  const classes = useStyle({ isToday: isTodayCell })
   const [showDialog, toggleDialog] = useState<boolean>(false)
   const [note, updateNote] = useState<string>('')
   const [incomingNote, updateIncomingNote] = useState<string>('')
+
+  useEffect(() => {
+    if (isTodayCell) {
+      updateNote(calendarContext.todaySchedule)
+    }
+  }, [isTodayCell, calendarContext, updateNote])
 
   const onClose = () => {
     toggleDialog(false)
@@ -79,6 +88,9 @@ export default function CalendarCell(props: Props) {
   }
 
   const onConfirm = () => {
+    if (isTodayCell) {
+      calendarContext.updateTodaySchedule(incomingNote)
+    }
     updateNote(incomingNote)
     onClose()
   }

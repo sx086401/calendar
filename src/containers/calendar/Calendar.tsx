@@ -84,7 +84,7 @@ export default function Calendar() {
   const tableHead = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const now = new Date()
   const [current, setCurrent] = useState<Date>(now)
-  const [todaySchedule, updateTodaySchedule] = useState('hahaha')
+  const [todaySchedule, updateTodaySchedule] = useState('example note')
 
   const startDateOfMonth = startOfMonth(current)
   const startDayOfMonth = getDay(startDateOfMonth)
